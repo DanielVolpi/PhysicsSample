@@ -10,15 +10,18 @@ public class GameController : MonoBehaviour
     GameObject m_replayButton;
     [SerializeField]
     TimeManager m_timeManager;
+    bool m_isPlaying;
 
     void Start()
     {
+        m_isPlaying = true;
+        Time.timeScale = 1f;
         m_replayButton.GetComponent<Button>().onClick.AddListener(HandleButtonClick);
     }
 
     void Update()
     {
-        if (!m_timeManager.IsAnyTimeLeft())
+        if (!m_timeManager.IsAnyTimeLeft() && m_isPlaying)
         {
             StopGame();
         }
@@ -26,16 +29,14 @@ public class GameController : MonoBehaviour
 
     void StopGame()
     {
-        //@ALERT: ¿Por que esto funciona pero el 1f en RestartGame no?
-        //Time.timeScale = 0f;
+        Time.timeScale = 0f;
         m_replayPanel.SetActive(true);
         Cursor.lockState = CursorLockMode.Confined;
+        m_isPlaying = false;
     }
 
     void RestartGame()
     {
-        Time.timeScale = 1f;
-        //m_replayPanel.SetActive(false);
         ReloadScene();
     }
 
